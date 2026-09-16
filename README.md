@@ -17,6 +17,14 @@ If your organization has a project that you would like to include in this reposi
 
 This and following sections describe how to build and run the nRF Connect SDK Add-on index in the local environment. If you wish to just publish an nRF Connect SDK Add-on, please refer to [`Contributing an Add-on`](#contributing-an-add-on).
 
+### Prerequisites
+
+**Node.js 18.18 or later** is required (Node.js **22** is used in CI). Older versions — including Node.js 12 — are not supported: `npm install` and the build scripts depend on modern Node.js and will fail on distributions that ship an outdated runtime. Check your version with:
+
+```
+node --version
+```
+
 To create an Add-on index page of your own, you need to start with cloning this repository and generating a new index JSON file. Use the information in the following sections to make sure that the JSON file is set up correctly.
 
 ### Generating index.json file
@@ -42,9 +50,9 @@ The `index.json` is compiled from the files in the `ncs-app-index/index` directo
 
 ### Adding your organization to the index
 
-To add your organization to the index, create an JSON of your own. The common practice is to name that file after the contributor's organization. The file is required to be located in `ncs-app-index/index` directory and follow the [`JSON schema`](./resources/schema.json).
+To add your organization to the index, create an JSON of your own. The common practice is to name that file after the contributor's organization. The file is required to be located in `ncs-app-index/index` directory and follow the schema defined in [`site/src/schema.ts`](./site/src/schema.ts) (`orgIndexSchema`, `validTags`).
 
-JSON schemas are provided to enforce the shape of the data in the index. They are located in the `resources` directory. To edit the schemas, make any changes in `site/src/schema.ts` and run `npm run generate-schemas` from the root directory.
+The index schema is defined in [`site/src/schema.ts`](./site/src/schema.ts). Edit that file to change allowed fields or tags. Running `npm install` generates a local `resources/schema.json` (gitignored) for VS Code validation.
 
 The following represents an example of the organization's index file:
 
@@ -75,7 +83,7 @@ The following represents an example of the organization's index file:
 
 ```
 
-For more information about each entry, see `resources/schema.json` file.
+For field requirements and allowed tag values, see [`site/src/schema.ts`](./site/src/schema.ts) (`orgIndexSchema`, `validTags`).
 
 
 ### Serving a local server
@@ -124,9 +132,9 @@ You can customize the local website in the following ways:
 
 To verify that your add-on index is correctly picked up by the [nRF Connect for Visual Studio Code extension], set the extension to fetch the add-on index from the custom URL:
 
-1. In Visual Studio Code, open the `settings.json` workspace settings file.
+1. In Visual Studio Code, open `settings.json`: press **Ctrl+Shift+P** (**Cmd+Shift+P** on macOS), search for **Preferences: Open Workspace Settings (JSON)**, and open the workspace settings file for this repository.
 
-1. Add the following line to the file:
+1. Add the following line to the file (same base URL as [Verifying website locally](#verifying-website-locally) — include the `/ncs-app-index` path, not `http://localhost:3000` alone):
    ```
    "nrf-connect.appIndexUri": "http://localhost:3000/ncs-app-index",
    ```
